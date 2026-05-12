@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#25D366">
+<title>Sitara Grand</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green:#25D366; --green-dark:#1ebe5d; --green-light:#e9faf0;
+  --yellow:#FFC300; --yellow-light:#fff9e6;
+  --red:#FF4B4B; --red-light:#fff0f0;
+  --orange:#FF8C00; --orange-light:#fff4e6;
+  --blue:#3B82F6; --blue-light:#eff6ff;
+  --bg:#f0f2f5; --white:#fff; --text:#111b21;
+  --text-secondary:#667781; --border:#e9edef;
+  --shadow:0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md:0 4px 16px rgba(0,0,0,0.10);
+  --radius:14px; --radius-sm:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
+
+/* LOGIN */
+.login-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;background:linear-gradient(160deg,#1a5c38 0%,#25D366 100%);}
+.login-logo{width:80px;height:80px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;color:white;margin-bottom:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);}
+.login-title{font-size:26px;font-weight:800;color:white;text-align:center;}
+.login-sub{font-size:14px;color:rgba(255,255,255,0.8);margin-top:4px;text-align:center;font-weight:500;}
+.login-card{background:white;border-radius:20px;padding:28px 24px;width:100%;max-width:360px;margin-top:32px;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+.login-label{font-size:13px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;text-align:center;}
+.pin-dots{display:flex;justify-content:center;gap:12px;margin-bottom:24px;}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border);transition:all .2s;}
+.pin-dot.filled{background:var(--green);border-color:var(--green);transform:scale(1.1);}
+.pin-keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.pin-key{padding:16px;background:var(--bg);border:none;border-radius:var(--radius-sm);font-size:20px;font-weight:700;font-family:inherit;cursor:pointer;color:var(--text);transition:all .1s;text-align:center;}
+.pin-key:active{background:var(--green-light);transform:scale(.95);}
+.pin-key.del{font-size:16px;color:var(--text-secondary);}
+.pin-key.empty{background:transparent;pointer-events:none;}
+.login-error{color:var(--red);font-size:13px;font-weight:600;text-align:center;margin-top:12px;min-height:20px;}
+.login-role-hint{text-align:center;font-size:12px;color:var(--text-secondary);margin-top:16px;font-weight:500;}
+
+/* HEADER */
+.header{background:var(--green);color:white;padding:0 16px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(37,211,102,.3);}
+.header-left{display:flex;align-items:center;gap:10px;}
+.header-logo{width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;}
+.header-title{font-size:16px;font-weight:700;}
+.header-sub{font-size:11px;opacity:.85;font-weight:500;}
+.header-right{display:flex;align-items:center;gap:8px;}
+.role-badge{background:rgba(255,255,255,.2);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;}
+.logout-btn{background:rgba(255,255,255,.15);border:none;color:white;border-radius:20px;padding:5px 10px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;}
+
+/* NAV */
+.nav{background:var(--white);display:flex;border-bottom:1px solid var(--border);position:sticky;top:58px;z-index:99;overflow-x:auto;}
+.nav::-webkit-scrollbar{display:none;}
+.nav-tab{flex:1;min-width:68px;padding:12px 6px;text-align:center;font-size:10px;font-weight:700;color:var(--text-secondary);cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;text-transform:uppercase;letter-spacing:.3px;}
+.nav-tab.active{color:var(--green);border-bottom-color:var(--green);}
+.nav-tab:active{background:var(--green-light);}
+.nav-icon{font-size:15px;display:block;margin-bottom:2px;}
+.nav-badge{display:inline-block;background:var(--red);color:white;border-radius:10px;font-size:9px;padding:1px 5px;margin-left:2px;font-weight:800;vertical-align:middle;}
+.nav-badge.yellow{background:var(--yellow);color:#333;}
+.nav-badge.orange{background:var(--orange);color:white;}
+
+/* MAIN */
+.main{padding:14px;max-width:600px;margin:0 auto;padding-bottom:90px;}
+
+/* STATS */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:14px;}
+.stat-card{background:var(--white);border-radius:var(--radius-sm);padding:11px 6px;text-align:center;box-shadow:var(--shadow);}
+.stat-num{font-size:24px;font-weight:800;line-height:1;}
+.stat-num.green{color:var(--green);}
+.stat-num.red{color:var(--red);}
+.stat-num.yellow{color:var(--yellow);}
+.stat-num.orange{color:var(--orange);}
+.stat-label{font-size:9px;color:var(--text-secondary);margin-top:3px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;}
+
+/* SECTION */
+.section{display:none;}
+.section.active{display:block;}
+.section-header{font-size:11px;font-weight:800;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;}
+
+/* ROOMS GRID */
+.rooms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+.room-card{background:var(--white);border-radius:var(--radius);padding:12px 10px;box-shadow:var(--shadow);cursor:pointer;transition:transform .15s;border-top:4px solid var(--border);position:relative;overflow:hidden;}
+.room-card:active{transform:scale(.97);}
+.room-card.available{border-top-color:var(--green);}
+.room-card.occupied{border-top-color:var(--red);}
+.room-card.advance{border-top-color:var(--yellow);}
+.room-card.due{border-top-color:var(--orange);}
+.room-number{font-size:20px;font-weight:800;}
+.room-type{font-size:9px;color:var(--text-secondary);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:7px;}
+.room-status-badge{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:3px 7px;font-size:9px;font-weight:800;text-transform:uppercase;}
+.badge-green{background:var(--green-light);color:#1a9c52;}
+.badge-red{background:var(--red-light);color:#c0392b;}
+.badge-yellow{background:var(--yellow-light);color:#b8860b;}
+.badge-orange{background:var(--orange-light);color:#cc7000;}
+.status-dot{width:5px;height:5px;border-radius:50%;}
+.dot-green{background:var(--green);}
+.dot-red{background:var(--red);}
+.dot-yellow{background:var(--yellow);}
+.dot-orange{background:var(--orange);}
+.room-guest{font-size:11px;font-weight:700;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.room-dates{font-size:9px;color:var(--text-secondary);margin-top:1px;font-weight:600;}
+.room-due{font-size:9px;font-weight:800;color:var(--orange);margin-top:3px;}
+.room-paid{font-size:9px;font-weight:800;color:var(--green);margin-top:3px;}
+.room-duration{position:absolute;top:8px;right:8px;background:var(--bg);border-radius:6px;padding:2px 6px;font-size:9px;font-weight:800;color:var(--text-secondary);}
+
+/* FORM */
+.form-group{margin-bottom:13px;}
+.form-label{font-size:11px;font-weight:800;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block;}
+.form-input{width:100%;padding:14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:16px;font-family:inherit;color:var(--text);background:var(--white);outline:none;transition:border-color .2s;-webkit-appearance:none;}
+.form-input:focus{border-color:var(--green);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.input-icon-wrap{position:relative;}
+.input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;}
+.input-icon+.form-input{padding-left:42px;}
+.toggle-group{display:flex;gap:8px;}
+.toggle-btn{flex:1;padding:13px 8px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;background:var(--white);color:var(--text-secondary);transition:all .15s;text-align:center;}
+.toggle-btn:active{transform:scale(.97);}
+.toggle-btn.active-green{border-color:var(--green);background:var(--green-light);color:#1a9c52;}
+.toggle-btn.active-yellow{border-color:var(--yellow);background:var(--yellow-light);color:#b8860b;}
+.toggle-btn.active-cash{border-color:var(--green);background:var(--green-light);color:#1a9c52;}
+.toggle-btn.active-upi{border-color:var(--blue);background:var(--blue-light);color:#1d4ed8;}
+.btn{width:100%;padding:16px;border:none;border-radius:var(--radius-sm);font-size:16px;font-weight:800;font-family:inherit;cursor:pointer;transition:all .15s;margin-top:6px;}
+.btn:active{transform:scale(.98);}
+.btn-green{background:var(--green);color:white;}
+.btn-red{background:var(--red);color:white;}
+.btn-orange{background:var(--orange);color:white;}
+.btn-blue{background:var(--blue);color:white;}
+.btn-outline{background:var(--white);border:1.5px solid var(--border);color:var(--text-secondary);}
+.error-msg{background:var(--red-light);color:var(--red);padding:10px 14px;border-radius:8px;font-size:13px;font-weight:700;margin-bottom:12px;display:none;}
+.success-msg{background:var(--green-light);color:#1a9c52;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:700;margin-bottom:12px;display:none;}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px);}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--white);border-radius:20px 20px 0 0;width:100%;max-width:600px;padding:20px 18px 40px;animation:slideUp .3s cubic-bezier(.34,1.2,.64,1);max-height:92vh;overflow-y:auto;}
+.modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 18px;}
+.modal-title{font-size:20px;font-weight:800;margin-bottom:2px;}
+.modal-sub{font-size:13px;color:var(--text-secondary);margin-bottom:18px;font-weight:600;}
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);}
+.detail-row:last-child{border-bottom:none;}
+.detail-key{font-size:11px;color:var(--text-secondary);font-weight:700;text-transform:uppercase;letter-spacing:.4px;}
+.detail-val{font-size:14px;font-weight:700;}
+
+/* BILL BOX */
+.bill-box{border-radius:var(--radius-sm);padding:16px;margin:14px 0;}
+.bill-box.green-box{background:var(--green-light);}
+.bill-box.orange-box{background:var(--orange-light);}
+.bill-line{display:flex;justify-content:space-between;margin-bottom:5px;font-size:13px;font-weight:600;}
+.bill-line.green{color:#1a9c52;}
+.bill-line.orange{color:#cc7000;}
+.bill-line.red{color:var(--red);}
+.bill-line.muted{color:var(--text-secondary);}
+.bill-divider{height:1px;background:rgba(0,0,0,.08);margin:8px 0;}
+.bill-total-line{display:flex;justify-content:space-between;font-size:19px;font-weight:800;margin-top:8px;}
+.bill-total-line.green{color:var(--green);}
+.bill-total-line.orange{color:var(--orange);}
+.bill-total-line.red{color:var(--red);}
+
+/* PAYMENT LOG */
+.payment-log{margin:14px 0;}
+.payment-log-title{font-size:11px;font-weight:800;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.payment-entry{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border-radius:8px;padding:10px 12px;margin-bottom:6px;}
+.payment-entry-left{display:flex;align-items:center;gap:8px;}
+.payment-method-icon{font-size:16px;}
+.payment-entry-name{font-size:13px;font-weight:700;}
+.payment-entry-time{font-size:10px;color:var(--text-secondary);font-weight:600;}
+.payment-entry-amount{font-size:14px;font-weight:800;color:var(--green);}
+
+/* PAYMENT FORM */
+.payment-form{background:var(--bg);border-radius:var(--radius-sm);padding:16px;margin:14px 0;}
+.payment-form-title{font-size:13px;font-weight:800;margin-bottom:12px;color:var(--text);}
+.pay-input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.pay-input{width:100%;padding:13px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:16px;font-family:inherit;color:var(--text);background:var(--white);outline:none;}
+.pay-input:focus{border-color:var(--green);}
+
+/* BOOKING CARDS */
+.booking-card{background:var(--white);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);margin-bottom:9px;cursor:pointer;display:flex;align-items:center;gap:12px;border-left:4px solid transparent;}
+.booking-card:active{transform:scale(.98);}
+.booking-card.has-due{border-left-color:var(--orange);}
+.booking-card.fully-paid{border-left-color:var(--green);}
+.booking-avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;flex-shrink:0;color:white;}
+.avatar-green{background:var(--green);}
+.avatar-yellow{background:var(--yellow);color:#333;}
+.avatar-orange{background:var(--orange);}
+.booking-info{flex:1;min-width:0;}
+.booking-name{font-size:15px;font-weight:700;}
+.booking-meta{font-size:11px;color:var(--text-secondary);margin-top:2px;font-weight:600;}
+.booking-due-badge{font-size:10px;font-weight:800;color:var(--orange);background:var(--orange-light);border-radius:6px;padding:2px 7px;margin-top:4px;display:inline-block;}
+.booking-paid-badge{font-size:10px;font-weight:800;color:#1a9c52;background:var(--green-light);border-radius:6px;padding:2px 7px;margin-top:4px;display:inline-block;}
+.booking-room-badge{background:var(--bg);border-radius:8px;padding:6px 10px;font-size:14px;font-weight:800;flex-shrink:0;}
+
+/* HISTORY */
+.history-card{background:var(--white);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);margin-bottom:9px;}
+.history-top{display:flex;justify-content:space-between;align-items:center;}
+.history-name{font-size:15px;font-weight:700;}
+.history-amount{font-size:15px;font-weight:800;color:var(--green);}
+.history-meta{font-size:11px;color:var(--text-secondary);margin-top:4px;font-weight:600;}
+.search-bar{position:relative;margin-bottom:12px;}
+.search-input{width:100%;padding:13px 14px 13px 40px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;font-family:inherit;outline:none;background:var(--white);}
+.search-input:focus{border-color:var(--green);}
+.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:16px;}
+
+/* OWNER */
+.revenue-card{background:linear-gradient(135deg,#1a5c38,var(--green));border-radius:var(--radius);padding:20px;color:white;margin-bottom:14px;box-shadow:0 4px 20px rgba(37,211,102,.3);}
+.revenue-label{font-size:12px;font-weight:700;opacity:.85;text-transform:uppercase;letter-spacing:.5px;}
+.revenue-amount{font-size:34px;font-weight:800;margin-top:4px;}
+.revenue-sub{font-size:12px;opacity:.8;margin-top:2px;font-weight:500;}
+.owner-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.owner-stat{background:var(--white);border-radius:var(--radius-sm);padding:14px;box-shadow:var(--shadow);}
+.owner-stat-num{font-size:24px;font-weight:800;}
+.owner-stat-label{font-size:11px;color:var(--text-secondary);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
+
+/* PRINT */
+@media print{body>*:not(#printArea){display:none!important;}#printArea{display:block!important;}}
+#printArea{display:none;padding:20px;font-family:'Plus Jakarta Sans',sans-serif;max-width:320px;margin:0 auto;}
+.print-header{text-align:center;border-bottom:2px dashed #ccc;padding-bottom:14px;margin-bottom:14px;}
+.print-hotel{font-size:20px;font-weight:800;}
+.print-sub{font-size:12px;color:#666;}
+.print-row{display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid #f0f0f0;}
+.print-section{font-size:11px;font-weight:800;color:#999;text-transform:uppercase;margin:10px 0 4px;}
+.print-total{display:flex;justify-content:space-between;padding:10px 0 0;font-size:16px;font-weight:800;border-top:2px solid #333;margin-top:6px;}
+.print-due{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;font-weight:800;color:#FF8C00;}
+.print-footer{text-align:center;font-size:11px;color:#999;margin-top:16px;}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:40px 20px;color:var(--text-secondary);}
+.empty-icon{font-size:36px;margin-bottom:10px;}
+.empty-text{font-size:14px;font-weight:700;}
+.empty-sub{font-size:12px;margin-top:4px;}
+
+/* FAB */
+.fab{position:fixed;bottom:20px;right:16px;width:56px;height:56px;border-radius:50%;background:var(--green);color:white;border:none;font-size:26px;cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,.5);display:flex;align-items:center;justify-content:center;z-index:150;}
+.fab:active{transform:scale(.92);}
+
+/* ANIMS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.shake{animation:shake .3s ease;}
+
+.divider{height:1px;background:var(--border);margin:14px 0;}
+.hidden{display:none!important;}
+.owner-only{display:none;}
+.owner-only.visible{display:flex;flex-direction:column;align-items:center;}
+
+/* ── GAP DETECTION ADDITIONS ── */
+.owner-only-section{display:none;}
+.owner-only-section.visible{display:block;}
+.staff-hidden{display:none!important;}
+.expected-box{background:var(--blue-light);border-radius:var(--radius-sm);padding:14px;margin:12px 0;border-left:4px solid var(--blue);}
+.expected-box-title{font-size:11px;font-weight:800;color:#1d4ed8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.expected-line{display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:#1e40af;margin-bottom:4px;}
+.expected-total{display:flex;justify-content:space-between;font-size:17px;font-weight:800;color:var(--blue);border-top:1px solid rgba(59,130,246,.2);padding-top:8px;margin-top:6px;}
+.cash-collect-box{background:var(--bg);border-radius:var(--radius-sm);padding:14px;margin:12px 0;border:2px solid var(--border);}
+.cash-collect-title{font-size:11px;font-weight:800;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+.gap-box{border-radius:var(--radius-sm);padding:14px;margin:10px 0;}
+.gap-box.exact{background:#f0fdf4;border-left:4px solid var(--green);}
+.gap-box.shortage{background:var(--red-light);border-left:4px solid var(--red);}
+.gap-box.excess{background:var(--yellow-light);border-left:4px solid var(--yellow);}
+.gap-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.gap-label.exact{color:#15803d;}
+.gap-label.shortage{color:var(--red);}
+.gap-label.excess{color:#92400e;}
+.gap-amount{font-size:20px;font-weight:800;}
+.gap-amount.exact{color:var(--green);}
+.gap-amount.shortage{color:var(--red);}
+.gap-amount.excess{color:var(--yellow);}
+.gap-status-pill{font-size:10px;font-weight:800;padding:3px 9px;border-radius:20px;text-transform:uppercase;}
+.pill-exact{background:#dcfce7;color:#15803d;}
+.pill-shortage{background:var(--red-light);color:var(--red);}
+.pill-excess{background:var(--yellow-light);color:#92400e;}
+.gap-filter-row{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;}
+.gap-filter-btn{padding:7px 14px;border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;background:var(--white);color:var(--text-secondary);white-space:nowrap;}
+.gap-filter-btn.active{background:var(--blue);color:white;border-color:var(--blue);}
+.gap-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.gap-summary-card{background:var(--white);border-radius:var(--radius-sm);padding:12px 10px;text-align:center;box-shadow:var(--shadow);}
+.gap-summary-num{font-size:18px;font-weight:800;line-height:1;}
+.gap-summary-label{font-size:9px;color:var(--text-secondary);font-weight:700;text-transform:uppercase;margin-top:3px;}
+.gap-table-wrap{overflow-x:auto;border-radius:var(--radius-sm);box-shadow:var(--shadow);}
+.gap-table{width:100%;border-collapse:collapse;font-size:12px;background:var(--white);}
+.gap-table th{background:var(--bg);padding:9px 10px;text-align:left;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--text-secondary);}
+.gap-table td{padding:10px 10px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.gap-table tr:last-child td{border-bottom:none;}
+
+/* ── FEATURE 1 & 2 ADDITIONS ── */
+.checkout-due-banner{background:var(--red-light);border-left:4px solid var(--red);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+.checkout-due-banner:active{opacity:.8;}
+.checkout-due-left{flex:1;}
+.checkout-due-title{font-size:12px;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:.4px;}
+.checkout-due-info{font-size:13px;font-weight:700;color:var(--text);margin-top:2px;}
+.checkout-due-amount{font-size:14px;font-weight:800;color:var(--red);}
+.due-checkout-badge{background:var(--red);color:white;font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;text-transform:uppercase;margin-left:4px;vertical-align:middle;}
+.extend-form{background:var(--blue-light);border-radius:var(--radius-sm);padding:14px;margin:12px 0;border-left:4px solid var(--blue);}
+.extend-form-title{font-size:11px;font-weight:800;color:#1d4ed8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+.extend-preview{background:var(--white);border-radius:8px;padding:10px 12px;margin-top:10px;font-size:13px;}
+.extend-preview-line{display:flex;justify-content:space-between;font-weight:600;margin-bottom:4px;color:var(--text-secondary);}
+.extend-preview-total{display:flex;justify-content:space-between;font-size:15px;font-weight:800;color:var(--blue);border-top:1px solid var(--border);padding-top:8px;margin-top:4px;}
+.extension-log{margin-top:10px;}
+.extension-entry{background:var(--blue-light);border-radius:8px;padding:8px 12px;margin-bottom:6px;font-size:11px;font-weight:600;color:#1e40af;}
+</style>
+</head>
+<body>
+
+<div id="printArea"></div>
+
+<!-- LOADER -->
+<div id="loaderScreen" class="login-screen hidden" style="gap:16px;">
+  <div class="login-logo" style="font-size:28px;">⏳</div>
+  <div style="color:white;font-size:18px;font-weight:800;" id="loaderMsg">Connecting...</div>
+  <div style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;">Sitara Grand Cloud</div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-logo">SG</div>
+  <div class="login-title">Sitara Grand</div>
+  <div class="login-sub">Lodge Management System</div>
+  <div class="login-card">
+    <div class="login-label">Enter PIN to continue</div>
+    <div class="pin-dots">
+      <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
+    </div>
+    <div class="pin-keypad">
+      <button class="pin-key" onclick="pinPress('1')">1</button>
+      <button class="pin-key" onclick="pinPress('2')">2</button>
+      <button class="pin-key" onclick="pinPress('3')">3</button>
+      <button class="pin-key" onclick="pinPress('4')">4</button>
+      <button class="pin-key" onclick="pinPress('5')">5</button>
+      <button class="pin-key" onclick="pinPress('6')">6</button>
+      <button class="pin-key" onclick="pinPress('7')">7</button>
+      <button class="pin-key" onclick="pinPress('8')">8</button>
+      <button class="pin-key" onclick="pinPress('9')">9</button>
+      <button class="pin-key empty"></button>
+      <button class="pin-key" onclick="pinPress('0')">0</button>
+      <button class="pin-key del" onclick="pinDel()">⌫</button>
+    </div>
+    <div class="login-error" id="loginError"></div>
+    <div class="login-role-hint">Staff PIN · Owner PIN</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+  <div class="header">
+    <div class="header-left">
+      <div class="header-logo">SG</div>
+      <div>
+        <div class="header-title">Sitara Grand</div>
+        <div class="header-sub" id="headerDate"></div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="role-badge" id="roleBadge"></div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="nav">
+    <div class="nav-tab active" id="navRooms" onclick="switchTab('rooms')"><span class="nav-icon">🏨</span>Rooms</div>
+    <div class="nav-tab" id="navCheckin" onclick="switchTab('checkin')"><span class="nav-icon">✅</span>Check-In</div>
+    <div class="nav-tab" id="navAdvance" onclick="switchTab('advance')"><span class="nav-icon">📅</span>Advance<span class="nav-badge yellow" id="advanceBadge">0</span></div>
+    <div class="nav-tab" id="navOccupied" onclick="switchTab('occupied')"><span class="nav-icon">🔴</span>Occupied<span class="nav-badge" id="occupiedBadge">0</span></div>
+    <div class="nav-tab" id="navDue" onclick="switchTab('due')"><span class="nav-icon">💰</span>Due<span class="nav-badge orange" id="dueBadge">0</span></div>
+    <div class="nav-tab" id="navHistory" onclick="switchTab('history')"><span class="nav-icon">📋</span>History</div>
+    <div class="nav-tab" id="navOwner" style="display:none;" onclick="switchTab('owner')"><span class="nav-icon">👑</span>Owner</div>
+    <div class="nav-tab" id="navGap" style="display:none;" onclick="switchTab('gap')"><span class="nav-icon">🔍</span>Gap</div>
+  </div>
+
+  <div class="main">
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="stat-card"><div class="stat-num green" id="statAvailable">0</div><div class="stat-label">Free</div></div>
+      <div class="stat-card"><div class="stat-num red" id="statOccupied">0</div><div class="stat-label">Occupied</div></div>
+      <div class="stat-card"><div class="stat-num yellow" id="statAdvance">0</div><div class="stat-label">Advance</div></div>
+      <div class="stat-card"><div class="stat-num orange" id="statDue">0</div><div class="stat-label">Due</div></div>
+    </div>
+
+    <!-- ROOMS -->
+    <div class="section active" id="tab-rooms">
+      <div id="dueCheckoutAlerts"></div>
+      <div class="section-header">All Rooms — Live View</div>
+      <div class="rooms-grid" id="roomsGrid"></div>
+    </div>
+
+    <!-- CHECK-IN -->
+    <div class="section" id="tab-checkin">
+      <div class="section-header">New Booking / Check-In</div>
+      <div class="error-msg" id="checkinError"></div>
+      <div class="success-msg" id="checkinSuccess"></div>
+      <div class="form-group">
+        <label class="form-label">Guest Name</label>
+        <input class="form-input" id="guestName" placeholder="Full name" type="text" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mobile Number</label>
+        <div class="input-icon-wrap">
+          <span class="input-icon">📱</span>
+          <input class="form-input" id="guestMobile" placeholder="10-digit mobile" type="tel" maxlength="10" autocomplete="off">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Aadhaar Number</label>
+        <div class="input-icon-wrap">
+          <span class="input-icon">🪪</span>
+          <input class="form-input" id="guestAadhaar" placeholder="XXXX XXXX XXXX" maxlength="14" type="text" autocomplete="off">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Area / City</label>
+        <div class="input-icon-wrap">
+          <span class="input-icon">📍</span>
+          <input class="form-input" id="guestArea" placeholder="Where are they from?" type="text" autocomplete="off">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Room Number</label>
+        <select class="form-input" id="roomSelect"></select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Check-In</label>
+          <input class="form-input" id="checkIn" type="date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Check-Out</label>
+          <input class="form-input" id="checkOut" type="date">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Advance Payment (optional)</label>
+        <div class="input-icon-wrap">
+          <span class="input-icon">₹</span>
+          <input class="form-input" id="advanceAmount" placeholder="0" type="number" min="0" autocomplete="off">
+        </div>
+      </div>
+      <div class="form-group" id="advanceMethodGroup">
+        <label class="form-label">Payment Method</label>
+        <div class="toggle-group">
+          <button class="toggle-btn active-cash" id="btnCash" onclick="setPayMethod('cash')">💵 Cash</button>
+          <button class="toggle-btn" id="btnUpi" onclick="setPayMethod('upi')">📲 UPI</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Booking Type</label>
+        <div class="toggle-group">
+          <button class="toggle-btn active-green" id="btnWalkIn" onclick="setBookingType('walkin')">🚶 Walk-In</button>
+          <button class="toggle-btn" id="btnAdvance" onclick="setBookingType('advance')">📅 Advance</button>
+        </div>
+      </div>
+      <button class="btn btn-green" onclick="submitBooking()">✅ Confirm Booking</button>
+      <button class="btn btn-outline" onclick="clearForm()" style="margin-top:10px;">Clear</button>
+    </div>
+
+    <!-- ADVANCE -->
+    <div class="section" id="tab-advance">
+      <div class="section-header">Upcoming Advance Bookings</div>
+      <div id="advanceList"></div>
+    </div>
+
+    <!-- OCCUPIED -->
+    <div class="section" id="tab-occupied">
+      <div class="section-header">Currently Occupied</div>
+      <div id="occupiedList"></div>
+    </div>
+
+    <!-- DUE -->
+    <div class="section" id="tab-due">
+      <div class="section-header">Pending Payments</div>
+      <div id="dueList"></div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="section" id="tab-history">
+      <div class="section-header">Guest History</div>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" id="historySearch" placeholder="Name, mobile or Aadhaar..." oninput="renderHistory()" type="search">
+      </div>
+      <div id="historyList"></div>
+    </div>
+
+    <!-- OWNER -->
+    <div class="section" id="tab-owner">
+      <div class="section-header">Owner Dashboard</div>
+      <div id="ownerDashboard"></div>
+    </div>
+
+    <!-- GAP ANALYTICS (OWNER ONLY) -->
+    <div class="section" id="tab-gap">
+      <div class="section-header">Cash Gap Analytics</div>
+      <div class="gap-filter-row" id="gapFilterRow">
+        <button class="gap-filter-btn active" onclick="setGapFilter('all',this)">All Time</button>
+        <button class="gap-filter-btn" onclick="setGapFilter('today',this)">Today</button>
+        <button class="gap-filter-btn" onclick="setGapFilter('week',this)">This Week</button>
+        <button class="gap-filter-btn" onclick="setGapFilter('month',this)">This Month</button>
+      </div>
+      <div id="gapSummary"></div>
+      <div class="section-header" style="margin-top:14px;">Checkout Records</div>
+      <div id="gapTable"></div>
+    </div>
+  </div>
+
+  <button class="fab" onclick="switchTab('checkin');window.scrollTo(0,0);">+</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="roomModal" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+const STAFF_PIN='7227', OWNER_PIN='2772', PRICE=1200;
+let currentRole=null, pinEntry='', bookingType='walkin', payMethod='cash';
+
+// ── SUPABASE CONFIG ──
+const SB_URL='https://wvgziosvweeoluxr.supabase.co';
+const SB_KEY='sb_publishable_sODaQngJ5jwxRSztZLg7mg_fMhgShxu';
+
+function sbHeaders(){
+  return {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+}
+
+// Single row store — all data in one JSON row keyed by lodge_id='sitara_grand'
+async function save(){
+  const payload={
+    lodge_id:'sitara_grand',
+    rooms_data:JSON.stringify(rooms),
+    bookings_data:JSON.stringify(bookings),
+    history_data:JSON.stringify(guestHistory),
+    next_id:nextId,
+    updated_at:new Date().toISOString()
+  };
+  try {
+    // Upsert — insert if not exists, update if exists
+    const res=await fetch(SB_URL+'/rest/v1/lodge_data?lodge_id=eq.sitara_grand',{
+      method:'GET',headers:sbHeaders()
+    });
+    const existing=await res.json();
+    if(existing&&existing.length>0){
+      // Update
+      await fetch(SB_URL+'/rest/v1/lodge_data?lodge_id=eq.sitara_grand',{
+        method:'PATCH',headers:{...sbHeaders(),'Prefer':'return=minimal'},
+        body:JSON.stringify(payload)
+      });
+    } else {
+      // Insert
+      await fetch(SB_URL+'/rest/v1/lodge_data',{
+        method:'POST',headers:{...sbHeaders(),'Prefer':'return=minimal'},
+        body:JSON.stringify(payload)
+      });
+    }
+  } catch(e){
+    // Fallback to localStorage if offline
+    localStorage.setItem('sg_offline_backup',JSON.stringify({rooms,bookings,history:guestHistory,nextId}));
+    console.warn('Supabase save failed, saved locally:',e);
+  }
+}
+
+async function load(){
+  showLoader('Connecting to cloud...');
+  try {
+    const res=await fetch(SB_URL+'/rest/v1/lodge_data?lodge_id=eq.sitara_grand&select=*',{
+      method:'GET',headers:sbHeaders()
+    });
+    if(!res.ok){
+      const errBody=await res.text();
+      // Table might not exist yet
+      if(res.status===404||errBody.includes('does not exist')||errBody.includes('relation')){
+        hideLoader('⚠️ Table not set up. See setup instructions.');
+        showSetupInstructions();
+        return false;
+      }
+      throw new Error('HTTP '+res.status+': '+errBody);
+    }
+    const data=await res.json();
+    if(data&&data.length>0){
+      const row=data[0];
+      if(row.rooms_data)    rooms=JSON.parse(row.rooms_data);
+      if(row.bookings_data) bookings=JSON.parse(row.bookings_data);
+      if(row.history_data)  guestHistory=JSON.parse(row.history_data);
+      if(row.next_id)       nextId=parseInt(row.next_id);
+    } else {
+      // First time — seed defaults
+      await save();
+    }
+    hideLoader();
+    return true;
+  } catch(e){
+    console.warn('Supabase load failed:',e);
+    const backup=localStorage.getItem('sg_offline_backup');
+    if(backup){
+      const d=JSON.parse(backup);
+      if(d.rooms)    rooms=d.rooms;
+      if(d.bookings) bookings=d.bookings;
+      if(d.history)  guestHistory=d.history;
+      if(d.nextId)   nextId=d.nextId;
+    }
+    hideLoader('⚠️ Offline — data may not be current');
+    return false;
+  }
+}
+
+function showSetupInstructions(){
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('loginError').innerHTML=`
+    ⚠️ Run this SQL in Supabase:<br>
+    <small style="font-family:monospace;font-size:10px;word-break:break-all;">
+    CREATE TABLE lodge_data (lodge_id TEXT PRIMARY KEY, rooms_data TEXT, bookings_data TEXT, history_data TEXT, next_id INT, updated_at TIMESTAMPTZ);
+    </small>`;
+}
+
+function showLoader(msg){
+  document.getElementById('loaderMsg').textContent=msg||'Loading...';
+  document.getElementById('loaderScreen').classList.remove('hidden');
+}
+function hideLoader(err){
+  document.getElementById('loaderScreen').classList.add('hidden');
+  if(err) document.getElementById('loginError').textContent=err;
+}
+
+// ── DATA ──
+const today=new Date();
+const fmt=d=>{const x=new Date(d);return x.toISOString().split('T')[0];};
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x;};
+
+let rooms=[
+  {number:'101',status:'occupied',pricePerDay:PRICE},
+  {number:'102',status:'available',pricePerDay:PRICE},
+  {number:'103',status:'advance',pricePerDay:PRICE},
+  {number:'104',status:'occupied',pricePerDay:PRICE},
+  {number:'105',status:'available',pricePerDay:PRICE},
+  {number:'106',status:'available',pricePerDay:PRICE},
+  {number:'107',status:'occupied',pricePerDay:PRICE},
+  {number:'108',status:'advance',pricePerDay:PRICE},
+  {number:'109',status:'available',pricePerDay:PRICE},
+];
+
+// payments: [{amount, method:'cash'|'upi', note, time}]
+let bookings=[
+  {id:1,guestName:'Ramesh Verma',mobile:'9876543210',aadhaar:'9876 5432 1012',area:'Jaipur',room:'101',checkIn:fmt(addDays(today,-2)),checkOut:fmt(addDays(today,1)),type:'walkin',payments:[{amount:1000,method:'cash',note:'Advance paid',time:fmtTime(new Date())}]},
+  {id:2,guestName:'Priya Sharma',mobile:'9123456789',aadhaar:'1234 5678 9012',area:'Delhi',room:'104',checkIn:fmt(addDays(today,-1)),checkOut:fmt(addDays(today,2)),type:'walkin',payments:[{amount:3600,method:'upi',note:'Full payment',time:fmtTime(new Date())}]},
+  {id:3,guestName:'Suresh Patel',mobile:'8765432109',aadhaar:'4567 8901 2345',area:'Ahmedabad',room:'107',checkIn:fmt(today),checkOut:fmt(addDays(today,3)),type:'walkin',payments:[]},
+  {id:4,guestName:'Anita Yadav',mobile:'7890123456',aadhaar:'7890 1234 5678',area:'Lucknow',room:'103',checkIn:fmt(addDays(today,2)),checkOut:fmt(addDays(today,5)),type:'advance',payments:[{amount:500,method:'cash',note:'Advance',time:fmtTime(new Date())}]},
+  {id:5,guestName:'Mohit Singh',mobile:'6543210987',aadhaar:'3456 7890 1234',area:'Chandigarh',room:'108',checkIn:fmt(addDays(today,1)),checkOut:fmt(addDays(today,4)),type:'advance',payments:[]},
+];
+
+let guestHistory=[];
+
+let nextId=6;
+// Do NOT call load() here — it runs inside loginAs after PIN
+
+// ── UTILS ──
+function calcDays(cin,cout){return Math.max(1,Math.round((new Date(cout)-new Date(cin))/86400000));}
+function formatDate(d){return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short'});}
+function getInitials(n){return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);}
+function getRoomBooking(num){return bookings.find(b=>b.room===num);}
+function fmtTime(d){return d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true})+' '+d.toLocaleDateString('en-IN',{day:'numeric',month:'short'});}
+function totalPaid(b){return (b.payments||[]).reduce((s,p)=>s+p.amount,0);}
+function totalBill(b){return calcDays(b.checkIn,b.checkOut)*PRICE;}
+function balanceDue(b){return Math.max(0,totalBill(b)-totalPaid(b));}
+function isFullyPaid(b){return balanceDue(b)===0;}
+function fmtINR(n){return '₹'+n.toLocaleString('en-IN');}
+
+// Check if checkout date has passed or is today
+function isCheckoutDue(b){
+  const coDate=new Date(b.checkOut+'T00:00:00');
+  const todayDate=new Date(fmt(today)+'T00:00:00');
+  return coDate<=todayDate;
+}
+
+// Render due checkout alert banners on rooms tab
+function renderDueAlerts(){
+  const el=document.getElementById('dueCheckoutAlerts');
+  if(!el)return;
+  const dueBookings=bookings.filter(b=>isCheckoutDue(b));
+  if(!dueBookings.length){el.innerHTML='';return;}
+  el.innerHTML=dueBookings.map(b=>{
+    const due=balanceDue(b);
+    return `<div class="checkout-due-banner" onclick="openRoomModal('${b.room}')">
+      <div class="checkout-due-left">
+        <div class="checkout-due-title">🔔 Checkout Due — Room ${b.room}</div>
+        <div class="checkout-due-info">${b.guestName} · ${formatDate(b.checkOut)}</div>
+        ${due>0?`<div style="font-size:11px;font-weight:700;color:var(--red);margin-top:2px;">⚠️ Balance: ${fmtINR(due)}</div>`:`<div style="font-size:11px;font-weight:700;color:var(--green);margin-top:2px;">✅ Fully Paid</div>`}
+      </div>
+      <div class="checkout-due-amount">→</div>
+    </div>`;
+  }).join('');
+}
+
+// ── PIN ──
+function pinPress(d){if(pinEntry.length>=4)return;pinEntry+=d;updateDots();if(pinEntry.length===4)setTimeout(checkPin,100);}
+function pinDel(){pinEntry=pinEntry.slice(0,-1);updateDots();}
+function updateDots(){for(let i=0;i<4;i++)document.getElementById('d'+i).classList.toggle('filled',i<pinEntry.length);}
+function checkPin(){
+  if(pinEntry===OWNER_PIN){loginAs('owner');return;}
+  if(pinEntry===STAFF_PIN){loginAs('staff');return;}
+  document.getElementById('loginError').textContent='Wrong PIN. Try again.';
+  const c=document.querySelector('.login-card');c.classList.add('shake');setTimeout(()=>c.classList.remove('shake'),300);
+  pinEntry='';updateDots();
+}
+function loginAs(role){
+  currentRole=role;
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('roleBadge').textContent=role==='owner'?'👑 Owner':'👤 Staff';
+  document.getElementById('headerDate').textContent=today.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+  document.getElementById('navOwner').style.display=(role==='owner')?'flex':'none';
+  document.getElementById('navGap').style.display=(role==='owner')?'flex':'none';
+  document.getElementById('tab-owner').style.display='none';
+  document.getElementById('tab-gap').style.display='none';
+  // Load from Supabase, then show app
+  load().then(()=>{
+    document.getElementById('app').classList.remove('hidden');
+    renderAll();
+  });
+}
+function logout(){
+  currentRole=null;pinEntry='';updateDots();
+  document.getElementById('loginError').textContent='';
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('navOwner').style.display='none';
+  document.getElementById('navGap').style.display='none';
+}
+
+// ── STATS ──
+function updateStats(){
+  const av=rooms.filter(r=>r.status==='available').length;
+  const oc=rooms.filter(r=>r.status==='occupied').length;
+  const ad=rooms.filter(r=>r.status==='advance').length;
+  const du=bookings.filter(b=>balanceDue(b)>0).length;
+  const dueOut=bookings.filter(b=>isCheckoutDue(b)).length;
+  document.getElementById('statAvailable').textContent=av;
+  document.getElementById('statOccupied').textContent=oc;
+  document.getElementById('statAdvance').textContent=ad;
+  document.getElementById('statDue').textContent=du+dueOut>0?du:'0';
+  document.getElementById('occupiedBadge').textContent=oc;
+  document.getElementById('advanceBadge').textContent=ad;
+  document.getElementById('dueBadge').textContent=du;
+  // Show red dot on rooms tab if any checkout due
+  const roomsNav=document.getElementById('navRooms');
+  if(roomsNav){
+    const existing=roomsNav.querySelector('.due-checkout-badge');
+    if(existing)existing.remove();
+    if(dueOut>0){
+      const badge=document.createElement('span');
+      badge.className='due-checkout-badge';
+      badge.textContent=dueOut;
+      roomsNav.appendChild(badge);
+    }
+  }
+}
+
+// ── ROOMS ──
+function renderRooms(){
+  const grid=document.getElementById('roomsGrid');
+  grid.innerHTML='';
+  rooms.forEach((room,i)=>{
+    const b=getRoomBooking(room.number);
+    const days=b?calcDays(b.checkIn,b.checkOut):0;
+    const due=b?balanceDue(b):0;
+    const paid=b?totalPaid(b):0;
+    const bill=b?totalBill(b):0;
+    let bc,dc,bl,cardClass=room.status;
+    if(room.status==='available'){bc='badge-green';dc='dot-green';bl='Free';}
+    else if(room.status==='occupied'){bc=due>0?'badge-orange':'badge-red';dc=due>0?'dot-orange':'dot-red';bl=due>0?'Due':'Occupied';if(due>0)cardClass='due';}
+    else{bc='badge-yellow';dc='dot-yellow';bl='Advance';}
+    grid.innerHTML+=`
+      <div class="room-card ${cardClass}" onclick="openRoomModal('${room.number}')" style="animation:fadeUp .4s ease ${i*.04}s both">
+        ${room.status!=='available'?`<div class="room-duration">${days}N</div>`:''}
+        <div class="room-number">${room.number}</div>
+        <div class="room-type">AC Room</div>
+        <div class="room-status-badge ${bc}"><span class="status-dot ${dc}"></span>${bl}</div>
+        ${b?`<div class="room-guest">${b.guestName}</div>
+             <div class="room-dates">${formatDate(b.checkIn)} → ${formatDate(b.checkOut)}</div>
+             ${due>0?`<div class="room-due">⚠️ Due: ${fmtINR(due)}</div>`:`<div class="room-paid">✅ Paid: ${fmtINR(paid)}</div>`}`
+          :`<div style="margin-top:8px;color:var(--green);font-weight:800;font-size:10px;">READY ✓</div>`}
+      </div>`;
+  });
+}
+
+// ── BOOKING CARDS ──
+function bookingCard(b,avatarColor){
+  const days=calcDays(b.checkIn,b.checkOut);
+  const due=balanceDue(b);
+  const isDue=isCheckoutDue(b);
+  return `<div class="booking-card ${due>0?'has-due':'fully-paid'}" onclick="openRoomModal('${b.room}')">
+    <div class="booking-avatar avatar-${avatarColor}">${getInitials(b.guestName)}</div>
+    <div class="booking-info">
+      <div class="booking-name">${b.guestName}${isDue?'<span class="due-checkout-badge">CHECKOUT DUE</span>':''}</div>
+      <div class="booking-meta">📱 ${b.mobile} · 📍 ${b.area}</div>
+      <div class="booking-meta">${formatDate(b.checkIn)} → ${formatDate(b.checkOut)} · ${days}N</div>
+      ${due>0?`<span class="booking-due-badge">⚠️ Due ${fmtINR(due)}</span>`:`<span class="booking-paid-badge">✅ Fully Paid</span>`}
+      ${b.extensionHistory&&b.extensionHistory.length>0?`<span style="font-size:10px;color:var(--blue);font-weight:700;margin-left:4px;">📅 Extended ×${b.extensionHistory.length}</span>`:''}
+    </div>
+    <div class="booking-room-badge">${b.room}</div>
+  </div>`;
+}
+
+function renderBookingLists(){
+  const adv=bookings.filter(b=>b.type==='advance');
+  const occ=bookings.filter(b=>b.type==='walkin');
+  const due=bookings.filter(b=>balanceDue(b)>0);
+  document.getElementById('advanceList').innerHTML=adv.length?adv.map(b=>bookingCard(b,'yellow')).join(''):`<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">No advance bookings</div></div>`;
+  document.getElementById('occupiedList').innerHTML=occ.length?occ.map(b=>bookingCard(b,'green')).join(''):`<div class="empty-state"><div class="empty-icon">🟢</div><div class="empty-text">All rooms free</div></div>`;
+  document.getElementById('dueList').innerHTML=due.length?due.map(b=>bookingCard(b,'orange')).join(''):`<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">No pending payments</div><div class="empty-sub">All guests are up to date</div></div>`;
+}
+
+// ── ROOM MODAL ──
+function openRoomModal(roomNum){
+  const room=rooms.find(r=>r.number===roomNum);
+  const b=getRoomBooking(roomNum);
+  const content=document.getElementById('modalContent');
+  if(room.status==='available'){
+    content.innerHTML=`
+      <div class="modal-title">Room ${roomNum}</div>
+      <div class="modal-sub">AC Room · ${fmtINR(room.pricePerDay)}/night</div>
+      <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val" style="color:var(--green)">✅ Available</span></div>
+      <div class="divider"></div>
+      <button class="btn btn-green" onclick="closeModalAndCheckin('${roomNum}')">+ Book This Room</button>
+      <button class="btn btn-outline" onclick="closeModal()" style="margin-top:10px;">Close</button>`;
+  } else if(b){
+    const days=calcDays(b.checkIn,b.checkOut);
+    const bill=totalBill(b);
+    const paid=totalPaid(b);
+    const due=balanceDue(b);
+    const sc=room.status==='advance'?'var(--yellow)':due>0?'var(--orange)':'var(--red)';
+    const sl=room.status==='advance'?'📅 Advance Booked':due>0?'⚠️ Occupied — Balance Due':'🔴 Occupied';
+    const payLog=(b.payments||[]).map(p=>`
+      <div class="payment-entry">
+        <div class="payment-entry-left">
+          <span class="payment-method-icon">${p.method==='cash'?'💵':'📲'}</span>
+          <div><div class="payment-entry-name">${p.method==='cash'?'Cash':'UPI'} — ${p.note||''}</div><div class="payment-entry-time">${p.time}</div></div>
+        </div>
+        <div class="payment-entry-amount">+${fmtINR(p.amount)}</div>
+      </div>`).join('');
+    const billColor=due>0?'orange':'green';
+    content.innerHTML=`
+      <div class="modal-title">Room ${roomNum}</div>
+      <div class="modal-sub">AC Room · ${fmtINR(room.pricePerDay)}/night</div>
+      <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val" style="color:${sc}">${sl}</span></div>
+      <div class="detail-row"><span class="detail-key">Guest</span><span class="detail-val">${b.guestName}</span></div>
+      <div class="detail-row"><span class="detail-key">📱 Mobile</span><span class="detail-val">${b.mobile}</span></div>
+      <div class="detail-row"><span class="detail-key">🪪 Aadhaar</span><span class="detail-val">${b.aadhaar||'—'}</span></div>
+      <div class="detail-row"><span class="detail-key">📍 Area</span><span class="detail-val">${b.area}</span></div>
+      <div class="detail-row"><span class="detail-key">Check-In</span><span class="detail-val">${formatDate(b.checkIn)}</span></div>
+      <div class="detail-row"><span class="detail-key">Check-Out</span><span class="detail-val">${formatDate(b.checkOut)}</span></div>
+      <div class="detail-row"><span class="detail-key">Duration</span><span class="detail-val">${days} night${days>1?'s':''}</span></div>
+
+      <div class="bill-box ${billColor}-box">
+        <div class="bill-line muted"><span>Room × ${days} nights</span><span>${fmtINR(room.pricePerDay)} × ${days}</span></div>
+        <div class="bill-line muted"><span>Total Bill</span><span>${fmtINR(bill)}</span></div>
+        <div class="bill-divider"></div>
+        <div class="bill-line green"><span>✅ Total Paid</span><span>${fmtINR(paid)}</span></div>
+        <div class="bill-total-line ${due>0?'orange':'green'}"><span>${due>0?'⚠️ Balance Due':'✅ Fully Paid'}</span><span>${fmtINR(due)}</span></div>
+      </div>
+
+      ${payLog?`<div class="payment-log"><div class="payment-log-title">Payment Log</div>${payLog}</div>`:''}
+
+      ${due>0?`
+      <div class="payment-form">
+        <div class="payment-form-title">💰 Collect Payment</div>
+        <div class="pay-input-row">
+          <input class="pay-input" id="payAmount" type="number" placeholder="Amount ₹" min="1" max="${due}">
+          <select class="pay-input" id="payMethodSelect">
+            <option value="cash">💵 Cash</option>
+            <option value="upi">📲 UPI</option>
+          </select>
+        </div>
+        <input class="pay-input" id="payNote" type="text" placeholder="Note (optional)" style="width:100%;margin-bottom:10px;">
+        <button class="btn btn-orange" onclick="collectPayment('${roomNum}','${b.id}')">➕ Add Payment</button>
+      </div>`:''}
+
+      <button class="btn btn-blue" onclick="printBill('${roomNum}')" style="margin-top:${due>0?'6':'14'}px">🖨️ Print Bill</button>
+      ${room.status==='occupied'||room.status==='advance'?`
+      <div class="expected-box" style="margin-top:14px;">
+        <div class="expected-box-title">💡 Expected at Checkout</div>
+        <div class="expected-line"><span>Total Bill</span><span>${fmtINR(bill)}</span></div>
+        <div class="expected-line"><span>Paid So Far</span><span>− ${fmtINR(paid)}</span></div>
+        <div class="expected-total"><span>Amount to Collect</span><span>${fmtINR(due)}</span></div>
+      </div>
+      ${isCheckoutDue(b)?`<div style="background:var(--red-light);border-radius:8px;padding:10px 14px;margin:10px 0;font-size:13px;font-weight:700;color:var(--red);">🔔 Checkout date has passed. Manual checkout required.</div>`:''}
+      <button class="btn btn-green" onclick="openExtendStay('${roomNum}','${b.id}')" style="margin-top:8px;">📅 Extend Stay</button>
+      ${room.status==='occupied'?`<button class="btn btn-red" onclick="checkOut('${roomNum}','${b.id}')" style="margin-top:10px;">🚪 Proceed to Check Out</button>`:''}
+      `:''}
+      <button class="btn btn-outline" onclick="closeModal()" style="margin-top:10px;">Close</button>`;
+  }
+  document.getElementById('roomModal').classList.add('open');
+}
+
+function closeModal(e){if(!e||e.target===document.getElementById('roomModal'))document.getElementById('roomModal').classList.remove('open');}
+function closeModalAndCheckin(rn){closeModal();switchTab('checkin');document.getElementById('roomSelect').value=rn;window.scrollTo(0,0);}
+
+// ── COLLECT PAYMENT ──
+async function collectPayment(roomNum, bookingId){
+  const amtEl=document.getElementById('payAmount');
+  const amt=parseFloat(amtEl.value);
+  const method=document.getElementById('payMethodSelect').value;
+  const note=document.getElementById('payNote').value.trim()||'Payment received';
+  const b=bookings.find(x=>String(x.id)===String(bookingId));
+  if(!b)return;
+  const due=balanceDue(b);
+  if(!amt||amt<=0){alert('Enter a valid amount.');return;}
+  if(amt>due){alert(`Amount cannot exceed balance due of ${fmtINR(due)}`);return;}
+  b.payments.push({amount:amt,method,note,time:fmtTime(new Date())});
+  await save();
+  renderAll();
+  openRoomModal(roomNum);
+}
+
+// ── CHECK OUT ──
+function checkOut(roomNum,bookingId){
+  const room=rooms.find(r=>r.number===roomNum);
+  const b=bookings.find(x=>String(x.id)===String(bookingId));
+  const due=b?balanceDue(b):0;
+  // Show checkout modal with cash_collected field
+  document.getElementById('modalContent').innerHTML=`
+    <div class="modal-title">🚪 Check Out — Room ${roomNum}</div>
+    <div class="modal-sub">${b?b.guestName:''}</div>
+    ${due>0?`<div style="background:var(--orange-light);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:700;color:#cc7000;">⚠️ Balance Due: ${fmtINR(due)}</div>`:''}
+    <div class="expected-box">
+      <div class="expected-box-title">💡 Expected Amount</div>
+      ${b?`
+      <div class="expected-line"><span>Room × ${calcDays(b.checkIn,b.checkOut)} nights</span><span>${fmtINR(PRICE)} × ${calcDays(b.checkIn,b.checkOut)}</span></div>
+      <div class="expected-line"><span>Already Paid</span><span>− ${fmtINR(totalPaid(b))}</span></div>
+      <div class="expected-total"><span>Collect Now</span><span>${fmtINR(Math.max(0,balanceDue(b)))}</span></div>`:''}
+    </div>
+    <div class="cash-collect-box">
+      <div class="cash-collect-title">💵 Cash Collected at Checkout</div>
+      <input class="form-input" id="cashCollectedInput" type="number" min="0" placeholder="Enter exact cash received ₹" oninput="updateGapPreview('${roomNum}','${bookingId}')">
+      <div id="gapPreview" style="margin-top:10px;"></div>
+    </div>
+    <button class="btn btn-red" id="confirmCheckoutBtn" onclick="confirmCheckOut('${roomNum}','${bookingId}')" style="opacity:0.4;pointer-events:none;">🔒 Enter Cash to Proceed</button>
+    <button class="btn btn-outline" onclick="openRoomModal('${roomNum}')" style="margin-top:10px;">Cancel</button>`;
+}
+
+function updateGapPreview(roomNum,bookingId){
+  const b=bookings.find(x=>String(x.id)===String(bookingId));
+  if(!b)return;
+  const cashInput=document.getElementById('cashCollectedInput');
+  const cash=parseFloat(cashInput.value)||0;
+  const expected=Math.max(0,balanceDue(b));
+  const gap=cash-expected;
+  const preview=document.getElementById('gapPreview');
+  const btn=document.getElementById('confirmCheckoutBtn');
+  if(cashInput.value===''){
+    preview.innerHTML='';
+    if(btn){btn.style.opacity='0.4';btn.style.pointerEvents='none';btn.textContent='🔒 Enter Cash to Proceed';}
+    return;
+  }
+  // Enable button only if cash >= expected (no shortage)
+  if(btn){
+    if(cash>=expected){
+      btn.style.opacity='1';btn.style.pointerEvents='auto';
+      btn.textContent='✅ Confirm Check Out';
+    } else {
+      btn.style.opacity='0.4';btn.style.pointerEvents='none';
+      btn.textContent=`🔒 Still Short ${fmtINR(expected-cash)}`;
+    }
+  }
+  let cls,label,icon;
+  if(gap===0){cls='exact';label='✅ Exact Match';icon='✅';}
+  else if(gap<0){cls='shortage';label=`⚠️ Shortage of ${fmtINR(Math.abs(gap))}`;icon='⚠️';}
+  else{cls='excess';label=`💛 Excess of ${fmtINR(gap)}`;icon='💛';}
+  preview.innerHTML=`<div class="gap-box ${cls}"><div class="gap-label ${cls}">${icon} ${label}</div><div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-top:2px;">Expected: ${fmtINR(expected)} · Cash: ${fmtINR(cash)}</div></div>`;
+}
+
+async function confirmCheckOut(roomNum,bookingId){
+  const cashEl=document.getElementById('cashCollectedInput');
+  if(!cashEl||cashEl.value===''){alert('⚠️ Please enter cash collected amount.');return;}
+  const cash=parseFloat(cashEl.value);
+  if(isNaN(cash)||cash<0){alert('⚠️ Enter a valid amount.');return;}
+  const room=rooms.find(r=>r.number===roomNum);
+  const b=bookings.find(x=>String(x.id)===String(bookingId));
+  const expectedAtCheckout=b?Math.max(0,balanceDue(b)):0;
+  const remainingAfterCash=expectedAtCheckout-cash;
+  // Block checkout if payment still pending after cash collected
+  if(remainingAfterCash>0){
+    alert(`⚠️ Full payment required before checkout.\n\nStill pending: ${fmtINR(remainingAfterCash)}\n\nCollect full amount to proceed.`);
+    return;
+  }
+  if(b){
+    const days=calcDays(b.checkIn,b.checkOut);
+    const bill=totalBill(b);
+    const alreadyPaid=totalPaid(b);
+    const expected_amount=b.expected_amount||bill;
+    const gap_amount=cash-expectedAtCheckout;
+    const finalTotalPaid=alreadyPaid+cash;
+    guestHistory.push({
+      id:Date.now(),
+      guestName:b.guestName,mobile:b.mobile,aadhaar:b.aadhaar,
+      area:b.area,room:b.room,checkIn:b.checkIn,checkOut:b.checkOut,
+      nights:days,total:bill,totalPaid:finalTotalPaid,
+      expected_amount,cash_collected:cash,gap_amount,
+      checkedOutAt:fmt(today),
+      checkedOutBy:currentRole,
+      checkoutTimestamp:new Date().toISOString(),
+      extensionHistory:b.extensionHistory||[]
+    });
+  }
+  room.status='available';
+  bookings=bookings.filter(x=>String(x.id)!==String(bookingId));
+  await save();closeModal();renderAll();
+}
+
+// ── EXTEND STAY ──
+function openExtendStay(roomNum, bookingId){
+  const b=bookings.find(x=>String(x.id)===String(bookingId));
+  if(!b)return;
+  const currentDays=calcDays(b.checkIn,b.checkOut);
+  const currentBill=totalBill(b);
+  const paid=totalPaid(b);
+  const extLog=(b.extensionHistory||[]).map(e=>`
+    <div class="extension-entry">📅 Extended by ${e.extraNights}N · ${formatDate(e.oldCheckout)} → ${formatDate(e.newCheckout)} · ${e.by} · ${e.at}</div>`).join('');
+  document.getElementById('modalContent').innerHTML=`
+    <div class="modal-title">📅 Extend Stay — Room ${roomNum}</div>
+    <div class="modal-sub">${b.guestName}</div>
+    <div class="detail-row"><span class="detail-key">Current Check-Out</span><span class="detail-val" style="color:var(--orange)">${formatDate(b.checkOut)}</span></div>
+    <div class="detail-row"><span class="detail-key">Current Duration</span><span class="detail-val">${currentDays} nights</span></div>
+    <div class="detail-row"><span class="detail-key">Current Bill</span><span class="detail-val">${fmtINR(currentBill)}</span></div>
+    <div class="detail-row"><span class="detail-key">Already Paid</span><span class="detail-val" style="color:var(--green)">${fmtINR(paid)}</span></div>
+    <div class="extend-form">
+      <div class="extend-form-title">Set New Check-Out Date</div>
+      <label style="font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:6px;">New Check-Out Date</label>
+      <input class="form-input" id="newCheckoutDate" type="date" value="${b.checkOut}" min="${b.checkOut}" oninput="previewExtension('${bookingId}')">
+      <div id="extendPreview"></div>
+    </div>
+    ${extLog?`<div class="extension-log"><div style="font-size:11px;font-weight:800;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Extension History</div>${extLog}</div>`:''}
+    <button class="btn btn-blue" onclick="confirmExtendStay('${roomNum}','${bookingId}')">✅ Confirm Extension</button>
+    <button class="btn btn-outline" onclick="openRoomModal('${roomNum}')" style="margin-top:10px;">Cancel</button>`;
+}
+
+function previewExtension(bookingId){
+  const b=bookings.find(x=>String(x.id)===String(bookingId));
+  if(!b)return;
+  const newDate=document.getElementById('newCheckoutDate').value;
+  if(!newDate||newDate<=b.checkOut){
+    document.getElementById('extendPreview').innerHTML='<div style="font-size:12px;color:var(--red);font-weight:600;margin-top:8px;">⚠️ New date must be after current checkout date.</div>';
+    return;
+  }
+  const newDays=calcDays(b.checkIn,newDate);
+  const extraNights=newDays-calcDays(b.checkIn,b.checkOut);
+  const newBill=newDays*PRICE;
+  const paid=totalPaid(b);
+  const newDue=Math.max(0,newBill-paid);
+  document.getElementById('extendPreview').innerHTML=`
+    <div class="extend-preview">
+      <div class="extend-preview-line"><span>Extra nights</span><span>+${extraNights}</span></div>
+      <div class="extend-preview-line"><span>New total (${newDays}N)</span><span>${fmtINR(newBill)}</span></div>
+      <div class="extend-preview-line"><span>Already paid</span><span>− ${fmtINR(paid)}</span></div>
+      <div class="extend-preview-total"><span>New Balance Due</span><span>${fmtINR(newDue)}</span></div>
+    </div>`;
+}
+
+async function confirmExtendStay(roomNum, bookingId){
+  const b=bookings.find(x=>String(x.id)===String(bookingId));
+  if(!b)return;
+  const newDate=document.getElementById('newCheckoutDate').value;
+  if(!newDate||newDate<=b.checkOut){
+    alert('⚠️ New date must be after current checkout date.');return;
+  }
+  const oldCheckout=b.checkOut;
+  const oldDays=calcDays(b.checkIn,b.checkOut);
+  const newDays=calcDays(b.checkIn,newDate);
+  const extraNights=newDays-oldDays;
+  // Log extension history
+  if(!b.extensionHistory)b.extensionHistory=[];
+  b.extensionHistory.push({
+    oldCheckout,newCheckout:newDate,
+    extraNights,by:currentRole,
+    at:fmtTime(new Date())
+  });
+  // Update booking
+  b.checkOut=newDate;
+  b.expected_amount=newDays*PRICE;
+  await save();
+  renderAll();
+  openRoomModal(roomNum);
+}
+function printBill(roomNum){
+  const room=rooms.find(r=>r.number===roomNum);
+  const b=getRoomBooking(roomNum);
+  if(!b)return;
+  const days=calcDays(b.checkIn,b.checkOut);
+  const bill=totalBill(b);
+  const paid=totalPaid(b);
+  const due=balanceDue(b);
+  const printDate=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+  const payLog=(b.payments||[]).map(p=>`<div class="print-row"><span>${p.method==='cash'?'💵 Cash':'📲 UPI'} — ${p.note}</span><span>+${fmtINR(p.amount)}</span></div>`).join('');
+  document.getElementById('printArea').innerHTML=`
+    <div class="print-header">
+      <div class="print-hotel">Sitara Grand</div>
+      <div class="print-sub">Lodge Receipt · ${printDate}</div>
+    </div>
+    <div class="print-row"><span>Guest</span><span>${b.guestName}</span></div>
+    <div class="print-row"><span>Mobile</span><span>${b.mobile}</span></div>
+    <div class="print-row"><span>Aadhaar</span><span>${b.aadhaar||'—'}</span></div>
+    <div class="print-row"><span>Area</span><span>${b.area}</span></div>
+    <div class="print-row"><span>Room</span><span>${roomNum} (AC)</span></div>
+    <div class="print-row"><span>Check-In</span><span>${formatDate(b.checkIn)}</span></div>
+    <div class="print-row"><span>Check-Out</span><span>${formatDate(b.checkOut)}</span></div>
+    <div class="print-row"><span>Duration</span><span>${days} night${days>1?'s':''}</span></div>
+    <div class="print-row"><span>Rate/Night</span><span>${fmtINR(room.pricePerDay)}</span></div>
+    <div class="print-total"><span>Total Bill</span><span>${fmtINR(bill)}</span></div>
+    ${payLog?`<div class="print-section">Payments Received</div>${payLog}`:''}
+    <div class="print-total" style="color:#25D366"><span>Total Paid</span><span>${fmtINR(paid)}</span></div>
+    ${due>0?`<div class="print-due"><span>⚠️ Balance Due</span><span>${fmtINR(due)}</span></div>`:''}
+    <div class="print-footer">Thank you for staying at Sitara Grand!</div>`;
+  window.print();
+}
+
+// ── HISTORY ──
+function renderHistory(){
+  const q=(document.getElementById('historySearch').value||'').toLowerCase();
+  const filtered=guestHistory.filter(h=>h.guestName.toLowerCase().includes(q)||(h.mobile&&h.mobile.includes(q))||(h.aadhaar&&h.aadhaar.includes(q))).slice().reverse();
+  document.getElementById('historyList').innerHTML=filtered.length?filtered.map(h=>`
+    <div class="history-card">
+      <div class="history-top"><div class="history-name">${h.guestName}</div><div class="history-amount">${fmtINR(h.totalPaid)}</div></div>
+      <div class="history-meta">📱 ${h.mobile} · 📍 ${h.area} · Room ${h.room}</div>
+      <div class="history-meta">${formatDate(h.checkIn)} → ${formatDate(h.checkOut)} · ${h.nights}N · Out: ${formatDate(h.checkedOutAt)}</div>
+      ${h.totalPaid<h.total?`<div style="font-size:11px;color:var(--orange);font-weight:700;margin-top:4px;">⚠️ Checked out with ${fmtINR(h.total-h.totalPaid)} unpaid</div>`:''}
+    </div>`).join('')
+    :`<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">No records found</div></div>`;
+}
+
+// ── OWNER ──
+function renderOwner(){
+  const histRevenue=guestHistory.reduce((s,h)=>s+h.totalPaid,0);
+  const curRevenue=bookings.reduce((s,b)=>s+totalPaid(b),0);
+  const totalRevenue=histRevenue+curRevenue;
+  const totalDue=bookings.reduce((s,b)=>s+balanceDue(b),0);
+  const gapRecords=guestHistory.filter(h=>h.hasOwnProperty('cash_collected'));
+  const totalShortage=gapRecords.filter(h=>h.gap_amount<0).reduce((s,h)=>s+Math.abs(h.gap_amount),0);
+  document.getElementById('ownerDashboard').innerHTML=`
+    <div class="revenue-card">
+      <div class="revenue-label">Total Collected (All Time)</div>
+      <div class="revenue-amount">${fmtINR(totalRevenue)}</div>
+      <div class="revenue-sub">${fmtINR(curRevenue)} from current guests · ${fmtINR(totalDue)} still pending</div>
+    </div>
+    <div class="owner-grid">
+      <div class="owner-stat"><div class="owner-stat-num" style="color:var(--green)">${rooms.filter(r=>r.status==='available').length}</div><div class="owner-stat-label">Rooms Free</div></div>
+      <div class="owner-stat"><div class="owner-stat-num" style="color:var(--red)">${rooms.filter(r=>r.status==='occupied').length}</div><div class="owner-stat-label">Occupied</div></div>
+      <div class="owner-stat"><div class="owner-stat-num" style="color:var(--orange)">${fmtINR(totalDue)}</div><div class="owner-stat-label">Total Due</div></div>
+      <div class="owner-stat"><div class="owner-stat-num" style="color:var(--blue)">${guestHistory.length+bookings.length}</div><div class="owner-stat-label">Total Guests</div></div>
+      <div class="owner-stat"><div class="owner-stat-num" style="color:var(--red)">${bookings.filter(b=>isCheckoutDue(b)).length}</div><div class="owner-stat-label">Checkout Due</div></div>
+      <div class="owner-stat"><div class="owner-stat-num" style="color:var(--blue)">${bookings.filter(b=>b.extensionHistory&&b.extensionHistory.length>0).length}</div><div class="owner-stat-label">Extended</div></div>
+    </div>
+    ${totalShortage>0?`
+    <div style="background:var(--red-light);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;border-left:4px solid var(--red);">
+      <div style="font-size:11px;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:.5px;">⚠️ Cash Shortage Alert</div>
+      <div style="font-size:20px;font-weight:800;color:var(--red);margin-top:4px;">${fmtINR(totalShortage)}</div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">Total shortage detected · <span style="cursor:pointer;color:var(--blue);font-weight:700;" onclick="switchTab('gap')">View Gap Report →</span></div>
+    </div>`:''}
+    <div class="section-header">Recent Checkouts</div>
+    ${guestHistory.slice().reverse().slice(0,5).map(h=>`
+      <div class="history-card">
+        <div class="history-top"><div class="history-name">${h.guestName}</div><div class="history-amount">${fmtINR(h.totalPaid)}</div></div>
+        <div class="history-meta">Room ${h.room} · ${h.nights}N · ${formatDate(h.checkedOutAt)}</div>
+        ${h.hasOwnProperty('gap_amount')&&h.gap_amount!==0?`<div style="font-size:11px;font-weight:700;margin-top:2px;color:${h.gap_amount<0?'var(--red)':'var(--yellow)'}">${h.gap_amount<0?'⚠️ Shortage':'💛 Excess'}: ${fmtINR(Math.abs(h.gap_amount))}</div>`:''}
+      </div>`).join('')}`;
+}
+
+// ── FORM ──
+function setPayMethod(m){payMethod=m;document.getElementById('btnCash').className='toggle-btn'+(m==='cash'?' active-cash':'');document.getElementById('btnUpi').className='toggle-btn'+(m==='upi'?' active-upi':'');}
+function setBookingType(t){bookingType=t;document.getElementById('btnWalkIn').className='toggle-btn'+(t==='walkin'?' active-green':'');document.getElementById('btnAdvance').className='toggle-btn'+(t==='advance'?' active-yellow':'');}
+
+function populateRoomSelect(){
+  const sel=document.getElementById('roomSelect');const cur=sel.value;
+  sel.innerHTML='<option value="">— Select Room —</option>';
+  rooms.forEach(r=>{const opt=document.createElement('option');opt.value=r.number;opt.textContent=`Room ${r.number} — ${r.status==='available'?'✅ Available':r.status==='occupied'?'🔴 Occupied':'📅 Advance'}`;if(r.status!=='available')opt.style.color='#aaa';sel.appendChild(opt);});
+  if(cur)sel.value=cur;
+}
+
+async function submitBooking(){
+  const name=document.getElementById('guestName').value.trim();
+  const mobile=document.getElementById('guestMobile').value.trim();
+  const aadhaar=document.getElementById('guestAadhaar').value.trim();
+  const area=document.getElementById('guestArea').value.trim();
+  const room=document.getElementById('roomSelect').value;
+  const cin=document.getElementById('checkIn').value;
+  const cout=document.getElementById('checkOut').value;
+  const advAmt=parseFloat(document.getElementById('advanceAmount').value)||0;
+  const errEl=document.getElementById('checkinError');const sucEl=document.getElementById('checkinSuccess');
+  errEl.style.display='none';sucEl.style.display='none';
+  if(!name||!mobile||!room||!cin||!cout){errEl.textContent='⚠️ Name, mobile, room and dates are required.';errEl.style.display='block';return;}
+  if(mobile.length!==10||!/^\d+$/.test(mobile)){errEl.textContent='⚠️ Enter a valid 10-digit mobile number.';errEl.style.display='block';return;}
+  if(new Date(cout)<=new Date(cin)){errEl.textContent='⚠️ Check-out must be after check-in.';errEl.style.display='block';return;}
+  const conflict=bookings.find(b=>b.room===room&&!(new Date(cout)<=new Date(b.checkIn)||new Date(cin)>=new Date(b.checkOut)));
+  if(conflict){errEl.textContent=`⚠️ Room ${room} already booked (${conflict.guestName}).`;errEl.style.display='block';return;}
+  const pmts=advAmt>0?[{amount:advAmt,method:payMethod,note:'Advance payment',time:fmtTime(new Date())}]:[];
+  const days_est=calcDays(cin,cout);
+  const expected_amount=days_est*PRICE;
+  bookings.push({id:nextId++,guestName:name,mobile,aadhaar,area,room,checkIn:cin,checkOut:cout,type:bookingType,payments:pmts,expected_amount});
+  rooms.find(x=>x.number===room).status=bookingType==='advance'?'advance':'occupied';
+  sucEl.textContent=`⏳ Saving...`;sucEl.style.display='block';
+  await save();
+  sucEl.textContent=`✅ ${name} booked into Room ${room}!${advAmt>0?' '+fmtINR(advAmt)+' received.':''}`;
+  clearForm();renderAll();setTimeout(()=>sucEl.style.display='none',3000);
+}
+
+function clearForm(){
+  ['guestName','guestMobile','guestAadhaar','guestArea','advanceAmount'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('roomSelect').value='';document.getElementById('checkinError').style.display='none';
+  setBookingType('walkin');setPayMethod('cash');
+}
+
+// ── TABS ──
+const TAB_IDS=['rooms','checkin','advance','occupied','due','history','owner','gap'];
+const NAV_IDS=['navRooms','navCheckin','navAdvance','navOccupied','navDue','navHistory','navOwner','navGap'];
+
+function switchTab(tab){
+  if((tab==='owner'||tab==='gap')&&currentRole!=='owner') return;
+  TAB_IDS.forEach(t=>{
+    const el=document.getElementById('tab-'+t);
+    if(el){
+      // Only touch display if it's an owner section
+      if(t==='owner'||t==='gap'){
+        if(currentRole==='owner') el.style.display=(t===tab)?'block':'none';
+      } else {
+        el.classList.toggle('active',t===tab);
+      }
+    }
+  });
+  NAV_IDS.forEach(nid=>{
+    const el=document.getElementById(nid);
+    if(el) el.classList.remove('active');
+  });
+  const navEl=document.getElementById('nav'+tab.charAt(0).toUpperCase()+tab.slice(1));
+  if(navEl) navEl.classList.add('active');
+  if(tab==='checkin') populateRoomSelect();
+  if(tab==='history') renderHistory();
+  if(tab==='owner') renderOwner();
+  if(tab==='gap') renderGap();
+}
+let gapFilter='all';
+function setGapFilter(f,el){
+  gapFilter=f;
+  document.querySelectorAll('.gap-filter-btn').forEach(b=>b.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderGap();
+}
+
+function filterHistoryByGap(){
+  const now=new Date();
+  return guestHistory.filter(h=>{
+    if(!h.hasOwnProperty('cash_collected'))return false;
+    if(gapFilter==='all')return true;
+    const d=new Date(h.checkedOutAt);
+    if(gapFilter==='today'){return d.toDateString()===now.toDateString();}
+    if(gapFilter==='week'){const w=new Date(now);w.setDate(now.getDate()-7);return d>=w;}
+    if(gapFilter==='month'){return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}
+    return true;
+  });
+}
+
+function renderGap(){
+  const data=filterHistoryByGap();
+  const shortages=data.filter(h=>h.gap_amount<0);
+  const excesses=data.filter(h=>h.gap_amount>0);
+  const exacts=data.filter(h=>h.gap_amount===0);
+  const totalShortage=shortages.reduce((s,h)=>s+Math.abs(h.gap_amount),0);
+  const totalExcess=excesses.reduce((s,h)=>s+h.gap_amount,0);
+
+  document.getElementById('gapSummary').innerHTML=`
+    <div class="gap-summary-grid">
+      <div class="gap-summary-card">
+        <div class="gap-summary-num" style="color:var(--red)">${fmtINR(totalShortage)}</div>
+        <div class="gap-summary-label">Total Shortage</div>
+      </div>
+      <div class="gap-summary-card">
+        <div class="gap-summary-num" style="color:var(--green)">${exacts.length}</div>
+        <div class="gap-summary-label">Exact Match</div>
+      </div>
+      <div class="gap-summary-card">
+        <div class="gap-summary-num" style="color:var(--yellow)">${fmtINR(totalExcess)}</div>
+        <div class="gap-summary-label">Total Excess</div>
+      </div>
+    </div>`;
+
+  if(!data.length){
+    document.getElementById('gapTable').innerHTML=`<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">No checkout records</div><div class="empty-sub">Records appear after guests check out</div></div>`;
+    return;
+  }
+
+  const rows=data.slice().reverse().map(h=>{
+    const gap=h.gap_amount;
+    let pillClass,gapText;
+    if(gap===0){pillClass='pill-exact';gapText='Exact';}
+    else if(gap<0){pillClass='pill-shortage';gapText=`−${fmtINR(Math.abs(gap))}`;}
+    else{pillClass='pill-excess';gapText=`+${fmtINR(gap)}`;}
+    return `<tr>
+      <td><strong>${h.room}</strong></td>
+      <td>${h.guestName}<br><span style="font-size:10px;color:var(--text-secondary)">${formatDate(h.checkedOutAt)}</span></td>
+      <td>${fmtINR(h.expected_amount||h.total)}</td>
+      <td>${fmtINR(h.cash_collected)}</td>
+      <td><span class="gap-status-pill ${pillClass}">${gapText}</span></td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('gapTable').innerHTML=`
+    <div class="gap-table-wrap">
+      <table class="gap-table">
+        <thead><tr><th>Room</th><th>Guest</th><th>Expected</th><th>Collected</th><th>Gap</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+// ── GAP ANALYTICS ──
+
+function renderAll(){
+  updateStats();
+  renderRooms();
+  renderBookingLists();
+  renderDueAlerts();
+}
+
+// ── INPUT FORMATTING ──
+document.addEventListener('DOMContentLoaded',()=>{
+  const a=document.getElementById('guestAadhaar');
+  if(a)a.addEventListener('input',function(){let v=this.value.replace(/\D/g,'').slice(0,12);this.value=v.replace(/(\d{4})(?=\d)/g,'$1 ');});
+  const m=document.getElementById('guestMobile');
+  if(m)m.addEventListener('input',function(){this.value=this.value.replace(/\D/g,'').slice(0,10);});
+  document.getElementById('checkIn').value=fmt(today);
+  document.getElementById('checkOut').value=fmt(addDays(today,1));
+});
+</script>
+</body>
+</html>
