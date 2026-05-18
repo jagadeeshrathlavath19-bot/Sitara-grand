@@ -887,8 +887,7 @@ function openRoomModal(roomNum){
       </div>
       ${isCheckoutDue(b)?`<div style="background:var(--red-light);border-radius:8px;padding:10px 14px;margin:10px 0;font-size:13px;font-weight:700;color:var(--red);">🔔 Checkout date has passed. Manual checkout required.</div>`:''}
       <button class="btn btn-green" onclick="openExtendStay('${roomNum}','${b.id}')" style="margin-top:8px;">📅 Extend Stay</button>
-      ${room.status==='occupied'?`<button class="btn btn-red" onclick="checkOut('${roomNum}','${b.id}')" style="margin-top:10px;">🚪 Proceed to Check Out</button>`:''}
-      `:''}
+      <button class="btn btn-red" onclick="checkOut('${roomNum}','${b.id}')" style="margin-top:10px;">🚪 Proceed to Check Out</button>
       <button class="btn btn-outline" onclick="closeModal()" style="margin-top:10px;">Close</button>`;
   }
   document.getElementById('roomModal').classList.add('open');
@@ -937,9 +936,9 @@ function checkOut(roomNum,bookingId){
       <div id="gapPreview" style="margin-top:10px;"></div>
     </div>
     <button class="btn btn-red" id="confirmCheckoutBtn" onclick="confirmCheckOut('${roomNum}','${bookingId}')" style="opacity:0.4;pointer-events:none;">🔒 Enter Cash to Proceed</button>
+    <button class="btn btn-outline" onclick="openRoomModal('${roomNum}')" style="margin-top:10px;">Cancel</button>`
+    :`<button class="btn btn-red" onclick="confirmCheckOut('${roomNum}','${bookingId}')">✅ Confirm Check Out</button>`}
     <button class="btn btn-outline" onclick="openRoomModal('${roomNum}')" style="margin-top:10px;">Cancel</button>`;
-}
-
 function updateGapPreview(roomNum,bookingId){
   const b=bookings.find(x=>String(x.id)===String(bookingId));
   if(!b)return;
