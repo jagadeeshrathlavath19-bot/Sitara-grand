@@ -558,7 +558,7 @@ async function save(){
     }
   } catch(e){
     // Fallback to localStorage if offline
-    localStorage.setItem('sg_offline_backup',JSON.stringify({rooms,bookings,history:guestHistory,nextId}));
+    
     console.warn('Supabase save failed, saved locally:',e);
   }
 }
@@ -594,14 +594,7 @@ async function load(){
     return true;
   } catch(e){
     console.warn('Supabase load failed:',e);
-    const backup=localStorage.getItem('sg_offline_backup');
-    if(backup){
-      const d=JSON.parse(backup);
-      if(d.rooms)    rooms=d.rooms;
-      if(d.bookings) bookings=d.bookings;
-      if(d.history)  guestHistory=d.history;
-      if(d.nextId)   nextId=d.nextId;
-    }
+    
     hideLoader('⚠️ Offline — data may not be current');
     return false;
   }
