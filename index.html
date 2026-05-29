@@ -631,25 +631,20 @@ const fmt=d=>{const x=new Date(d);return x.toISOString().split('T')[0];};
 const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x;};
 
 let rooms=[
-  {number:'101',status:'occupied',pricePerDay:PRICE},
+  {number:'101',status:'available',pricePerDay:PRICE},
   {number:'102',status:'available',pricePerDay:PRICE},
-  {number:'103',status:'advance',pricePerDay:PRICE},
-  {number:'104',status:'occupied',pricePerDay:PRICE},
+  {number:'103',status:'available',pricePerDay:PRICE},
+  {number:'104',status:'available',pricePerDay:PRICE},
   {number:'105',status:'available',pricePerDay:PRICE},
   {number:'106',status:'available',pricePerDay:PRICE},
-  {number:'107',status:'occupied',pricePerDay:PRICE},
-  {number:'108',status:'advance',pricePerDay:PRICE},
+  {number:'107',status:'available',pricePerDay:PRICE},
+  {number:'108',status:'available',pricePerDay:PRICE},
   {number:'109',status:'available',pricePerDay:PRICE},
 ];
 
 // payments: [{amount, method:'cash'|'upi', note, time}]
-let bookings=[
-  {id:1,guestName:'Ramesh Verma',mobile:'9876543210',aadhaar:'9876 5432 1012',area:'Jaipur',room:'101',checkIn:fmt(addDays(today,-2)),checkOut:fmt(addDays(today,1)),type:'walkin',payments:[{amount:1000,method:'cash',note:'Advance paid',time:fmtTime(new Date())}]},
-  {id:2,guestName:'Priya Sharma',mobile:'9123456789',aadhaar:'1234 5678 9012',area:'Delhi',room:'104',checkIn:fmt(addDays(today,-1)),checkOut:fmt(addDays(today,2)),type:'walkin',payments:[{amount:3600,method:'upi',note:'Full payment',time:fmtTime(new Date())}]},
-  {id:3,guestName:'Suresh Patel',mobile:'8765432109',aadhaar:'4567 8901 2345',area:'Ahmedabad',room:'107',checkIn:fmt(today),checkOut:fmt(addDays(today,3)),type:'walkin',payments:[]},
-  {id:4,guestName:'Anita Yadav',mobile:'7890123456',aadhaar:'7890 1234 5678',area:'Lucknow',room:'103',checkIn:fmt(addDays(today,2)),checkOut:fmt(addDays(today,5)),type:'advance',payments:[{amount:500,method:'cash',note:'Advance',time:fmtTime(new Date())}]},
-  {id:5,guestName:'Mohit Singh',mobile:'6543210987',aadhaar:'3456 7890 1234',area:'Chandigarh',room:'108',checkIn:fmt(addDays(today,1)),checkOut:fmt(addDays(today,4)),type:'advance',payments:[]},
-];
+let bookings=[];
+  
 
 let guestHistory=[];
 
